@@ -1,12 +1,26 @@
 {
   "name": "package-manager",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.2.0",
+  "platform": "win x64",
+  "main": "build/main.js",
   "license": "MIT",
+  "company": "ProductBuilder",
+  "productName": "Package Manager",
+  "description": "Package Manager for ProductBuilder Configurations",
+  "author": "Jorne Jongsma",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JorneJongsma/packagemanager-dev.git"
+  },
   "scripts": {
-    "start:webpack": "tsc -p . --watch",
-    "start:electron": "nodemon --exec electron dist/index.js",
-    "start": "npm-run-all -l -p start:*"
+    "start:render": "webpack serve --config-name renderConfig --mode development",
+    "start:main": "webpack --config-name mainConfig --mode development --watch",
+    "start:electron": "nodemon --exec electron build/main.js APP_DEV",
+    "start": "npm-run-all -l -p start:*",
+    "build": "webpack --mode production",
+    "test:build": "yarn build && electron build/main.js",
+    "_dist": "yarn build && node electron-builder.config.js",
+    "dist": "electron-builder build --win --publish always"
   },
   "dependencies": {
     "react": "^17.0.1",
@@ -16,6 +30,8 @@
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
     "electron": "^10.1.5",
+    "electron-builder": "^22.9.1",
+    "electron-updater": "^4.3.5",
     "nodemon": "^2.0.6",
     "ts-loader": "^8.0.11",
     "typescript": "^4.0.5",

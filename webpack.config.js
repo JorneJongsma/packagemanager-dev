@@ -1,11 +1,12 @@
-module.exports = {
-  entry: './src/index.tsx',
-  output: {
-    path: `${__dirname}/dist`,
-    filename: 'render/index.js',
-  },
+const path = require('path')
+
+const commonConfig = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+  },
+  node: {
+    __dirname: false,
+    __filename: false
   },
   module: {
     rules: [
@@ -22,8 +23,33 @@ module.exports = {
     ],
   },
   devtool: 'eval-source-map',
+}
+
+const renderConfig = {
+  ...commonConfig,
+  name: "renderConfig",
+  target: 'electron-renderer',
+  entry: './src/render/index.tsx',
+  output: {
+    path: `${__dirname}/build`,
+    filename: 'render.js',
+  },
   devServer: {
-    contentBase: './dist',
-    port: 8081
+    contentBase: './build',
+    host: require('os').hostname().toLowerCase(),
+    port: 3000
   },
 };
+
+const mainConfig = {
+  ...commonConfig,
+  name: "mainConfig",
+  target: 'electron-main',
+  entry: './src/main/index.ts',
+  output: {
+    path: `${__dirname}/build`,
+    filename: 'main.js',
+  },
+}
+
+module.exports = (env, argv) => [renderConfig, mainConfig]

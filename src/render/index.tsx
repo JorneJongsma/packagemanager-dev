@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 
 ReactDOM.render(
   <>
-    <h1>Hello World!</h1>
+    <h1>Hello World! it's quick a test </h1>
   </>,
   document.getElementById('root')
 );
