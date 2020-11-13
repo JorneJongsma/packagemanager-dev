@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, Menu } from 'electron'
-const { autoUpdater } = require('electron-updater');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
+import { hostname } from 'os';
 
-let win: BrowserWindow | null
+let win: BrowserWindow | null;
 
 function createWindow() {
   win = new BrowserWindow({
@@ -13,52 +14,50 @@ function createWindow() {
     frame: false,
     transparent: false,
     webPreferences: {
-      nodeIntegration: true
-    }
-  })
+      nodeIntegration: true,
+    },
+  });
 
   if (process.env.NODE_ENV === 'production') {
-    win.loadURL(`file://${__dirname}/index.html`)
-    // win.webContents.openDevTools()
+    win.loadURL(`file://${__dirname}/index.html`);
+    win.webContents.openDevTools();
   } else {
-    const HOST = require('os').hostname().toLowerCase()
-    const PORT = 3000
-    win.loadURL(`http://${HOST}:${PORT}/`)
-    win.webContents.openDevTools()
+    const HOST = hostname().toLowerCase();
+    const PORT = 3000;
+    win.loadURL(`http://${HOST}:${PORT}/`);
+    win.webContents.openDevTools();
   }
 
-
   win.once('ready-to-show', () => {
-    win!.show()
-  })
-
+    (win as BrowserWindow).show();
+  });
 
   win.on('closed', () => {
-    win = null
-  })
+    win = null;
+  });
 }
 
 app.on('ready', () => {
-  createWindow()
+  createWindow();
   autoUpdater.checkForUpdatesAndNotify();
-})
+});
 
 app.on('activate', () => {
   if (win === null) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
 
 autoUpdater.on('update-available', () => {
-  win!.webContents.send('update_available');
+  (win as BrowserWindow).webContents.send('update_available');
 });
 
 autoUpdater.on('update-downloaded', () => {
-  win!.webContents.send('update_downloaded');
+  (win as BrowserWindow).webContents.send('update_downloaded');
 });
 
 ipcMain.on('restart_app', () => {

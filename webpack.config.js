@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 const commonConfig = {
   resolve: {
@@ -6,7 +6,7 @@ const commonConfig = {
   },
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
   module: {
     rules: [
@@ -23,11 +23,11 @@ const commonConfig = {
     ],
   },
   devtool: 'eval-source-map',
-}
+};
 
 const renderConfig = {
   ...commonConfig,
-  name: "renderConfig",
+  name: 'renderConfig',
   target: 'electron-renderer',
   entry: './src/render/index.tsx',
   output: {
@@ -37,19 +37,19 @@ const renderConfig = {
   devServer: {
     contentBase: './build',
     host: require('os').hostname().toLowerCase(),
-    port: 3000
+    port: 3000,
   },
 };
 
 const mainConfig = {
   ...commonConfig,
-  name: "mainConfig",
+  name: 'mainConfig',
   target: 'electron-main',
   entry: './src/main/index.ts',
   output: {
     path: `${__dirname}/build`,
     filename: 'main.js',
   },
-}
+};
 
-module.exports = (env, argv) => [renderConfig, mainConfig]
+module.exports = (env, argv) => [renderConfig, mainConfig];

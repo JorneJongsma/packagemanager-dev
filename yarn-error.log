@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js dist
+  C:\Program Files\nodejs\node.exe C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js publish
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Jorne\bin;C:\Python38\Scripts;C:\Python38;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Common Files\Autodesk Shared;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\7-Zip;C:\USD\bin;C:\USD\lib;C:\Python27;C:\Python27\Scripts;C:\Program Files\Easy 7-Zip;C:\Program Files\CMake\bin;C:\Program Files\nodejs;C:\Users\Jorne\.cargo\bin;C:\Users\Jorne\AppData\Local\Microsoft\WindowsApps;C:\Users\Jorne\AppData\Local\Programs\Microsoft VS Code\bin;D:\USD\bin;D:\USD\lib;D:\GLTF_TO_USD\bin;C:\Users\Jorne\AppData\Roaming\npm;C:\Users\Jorne\AppData\Local\GitHubDesktop\bin
@@ -14,31 +14,41 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: C:\Users\Jorne\Documents\Repos\MOOOI\packagemanager-dev\package.json: Unexpected token } in JSON at position 594
-      at JSON.parse (<anonymous>)
-      at C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
-      at C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\Jorne\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:136216:13)
+      at Interface.emit (events.js:315:20)
+      at Interface._ttyWrite (readline.js:868:16)
+      at ReadStream.onkeypress (readline.js:205:10)
+      at ReadStream.emit (events.js:315:20)
+      at emitKeys (internal/readline/utils.js:335:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1137:36)
+      at ReadStream.emit (events.js:315:20)
+      at addChunk (_stream_readable.js:295:12)
 
 npm manifest: 
   {
     "name": "package-manager",
-    "version": "1.0.0",
+    "version": "1.2.3",
     "platform": "win x64",
-    "main": "build/main/index.js",
+    "main": "build/main.js",
     "license": "MIT",
     "company": "ProductBuilder",
     "productName": "Package Manager",
+    "description": "Package Manager for ProductBuilder Configurations",
+    "author": "Jorne Jongsma",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/JorneJongsma/packagemanager-dev.git"
+    },
     "scripts": {
-      "start:render": "webpack serve",
-      "start:main": "tsc -p . --watch",
-      "start:electron": "nodemon --exec electron build/main/index.js",
+      "start:render": "webpack serve --config-name renderConfig --mode development",
+      "start:main": "webpack --config-name mainConfig --mode development --watch",
+      "start:electron": "nodemon --exec electron build/main.js APP_DEV",
       "start": "npm-run-all -l -p start:*",
-      "build:main": "tsc -p .",
-      "build:render": "webpack --mode=production",
-      "test:build": "electron build/main/index.js",
-      "dist": "npm run build && node electron-builder.config.js",
+      "build": "webpack --mode production",
+      "test:build": "yarn build && electron-builder build --win --publish never",
+      "dist": "yarn build && electron-builder build --win --publish always"
     },
     "dependencies": {
       "react": "^17.0.1",
@@ -49,6 +59,7 @@ npm manifest:
       "@types/react-dom": "^16.9.9",
       "electron": "^10.1.5",
       "electron-builder": "^22.9.1",
+      "electron-updater": "^4.3.5",
       "nodemon": "^2.0.6",
       "ts-loader": "^8.0.11",
       "typescript": "^4.0.5",
@@ -188,6 +199,11 @@ Lockfile:
     dependencies:
       "@types/prop-types" "*"
       csstype "^3.0.2"
+  
+  "@types/semver@^7.3.1":
+    version "7.3.4"
+    resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.4.tgz#43d7168fec6fa0988bb1a513a697b29296721afb"
+    integrity sha512-+nVsLKlcUCeMzD2ufHEYuJ9a2ovstb6Dp52A5VsoKxDXgvE051XgHI/33I1EymwkRGQkwnA0LkhnUzituGs4EQ==
   
   "@types/yargs-parser@*":
     version "15.0.0"
@@ -1417,6 +1433,19 @@ Lockfile:
     version "1.3.592"
     resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.592.tgz#4621521b223bf6e5469373528321e185d3c24670"
     integrity sha512-kGNowksvqQiPb1pUSQKpd8JFoGPLxYOwduNRCqCxGh/2Q1qE2JdmwouCW41lUzDxOb/2RIV4lR0tVIfboWlO9A==
+  
+  electron-updater@^4.3.5:
+    version "4.3.5"
+    resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-4.3.5.tgz#4fb36f593a031c87ea07ee141c9f064d5deffb15"
+    integrity sha512-5jjN7ebvfj1cLI0VZMdCnJk6aC4bP+dy7ryBf21vArR0JzpRVk0OZHA2QBD+H5rm6ZSeDYHOY6+8PrMEqJ4wlQ==
+    dependencies:
+      "@types/semver" "^7.3.1"
+      builder-util-runtime "8.7.2"
+      fs-extra "^9.0.1"
+      js-yaml "^3.14.0"
+      lazy-val "^1.0.4"
+      lodash.isequal "^4.5.0"
+      semver "^7.3.2"
   
   electron@^10.1.5:
     version "10.1.5"
@@ -2792,6 +2821,11 @@ Lockfile:
     integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
     dependencies:
       p-locate "^4.1.0"
+  
+  lodash.isequal@^4.5.0:
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+    integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
   
   lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15:
     version "4.17.20"

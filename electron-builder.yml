@@ -1,5 +1,0 @@
-appId: com.example.ElectronAutoUpdate
-publish:
-  provider: github
-  token: 3c95c684bb9f97e6945069e8a54c60e1c12c313a
-files: ['build/', '!**/*.map']

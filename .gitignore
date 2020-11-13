@@ -1,5 +1,7 @@
 node_modules/
 dist/*
+build/*
 
-!dist/.gitkeep 
-!dist/index.html
+!build/.gitkeep 
+!build/index.html
+!build/assets
