@@ -9,18 +9,19 @@ function createWindow() {
     width: 800,
     height: 600,
     backgroundColor: '#ffffff',
-    // icon: `${__dirname}/assets/moobels.ico`,
+    icon: `${__dirname}/assets/productbuilder-magenta.ico`,
     show: false, // Dit zet de Browserwindow uit, gevolgd door later een event dat zodra de render ready is op true wordt gezet; Dit voorkomt het showen van een leeg window.
     frame: false,
     transparent: false,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true
     },
   });
 
   if (process.env.NODE_ENV === 'production') {
     win.loadURL(`file://${__dirname}/index.html`);
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
   } else {
     const HOST = hostname().toLowerCase();
     const PORT = 3000;
@@ -42,10 +43,23 @@ app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify();
 });
 
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
 app.on('activate', () => {
   if (win === null) {
     createWindow();
   }
+});
+
+ipcMain.on('APP_TITLE_REQUEST', (event, arg) => {
+  event.returnValue = {
+    name: app.getName(),
+    version: app.getVersion(),
+  };
 });
 
 ipcMain.on('app_version', (event) => {
